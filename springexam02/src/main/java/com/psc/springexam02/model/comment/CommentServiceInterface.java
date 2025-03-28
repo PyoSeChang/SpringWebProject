@@ -10,7 +10,10 @@ public interface CommentServiceInterface {
     // 수정
     void updateComment(CommentDTO comment);
     // 삭제
-    void deleteComment(CommentDTO comment);
+    void deleteComment(int cnum);
     // 출력
-    List<CommentDTO> showComments();
+    List<CommentDTO> showComments(int num);
+    // 댓글 하나 출력
+    CommentDTO showComment(int cnum);
 }
+

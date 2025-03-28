@@ -26,75 +26,143 @@
 	</table>
 		<button type="button" class="btn btn-primary"
 		 onclick="location.href='updateBoard?num=${board.num}'">수정</button>
-		<button type="button" class="btn btn-secondary" id="btnDelete" onclick="location.href='deleteBoard?num${board.num}'">삭제</button>
+	<form id="deleteBoardForm" action="/board/deleteBoard" method="post" style="display:inline;">
+		<input type="hidden" name="num" value="${board.num}" />
+		<input type="hidden" name="password" id="boardDeletePassword" />
+		<button type="button" class="btn btn-secondary" id="deleteBoard">삭제</button>
+	</form>
 
 </div>
 
-<div class = "container mt-3">
-   <label for="msg">msg:</label>
-  <textarea class="form-control" id="msg" name="msg" 
-			   placeholder="Content goes here" rows=5></textarea>
-<button class="btn btn-success btn-sm mt-3" id="btnComment">Comment Write</button>
+<div class="container mt-3">
+	<label for="userid">작성자:</label>
+	<input type="text" class="form-control" id="userid" name="userid" placeholder="이름 입력" required />
+	<label for="password">비밀번호</label>
+	<input type="password" class="form-control" id="password" name="password" required />
+	<label for="message" class="mt-3">내용:</label>
+	<textarea class="form-control" id="message" name="message" placeholder="댓글 내용" rows="5" required></textarea>
 
-<div class="mt-3">Comment()</div>
-<div id="result"></div>
+	<input type="hidden" id="bnum" name="bnum" value="${board.num}" />
+
+	<button class="btn btn-success btn-sm mt-3" id="btnComment">댓글 달기</button>
 </div>
+
+<div class="mt-5">
+	<h5>댓글 목록 (<span class="cntSpan">${commentList.size()}</span>)</h5>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>작성자</th>
+			<th>내용</th>
+			<th>작성일</th>
+		</tr>
+		</thead>
+		<tbody>
+		<c:forEach var="c" items="${commentList}">
+			<tr class="comment-row">
+				<td>${c.userid}</td>
+				<td>${c.message}</td>
+				<td>${c.regdate}</td>
+				<td>
+					<form id="updateCommentForm_${c.cnum}" action="/comment/verifyUpdate" method="post" style="display:inline;">
+						<input type="hidden" name="cnum" value="${c.cnum}" />
+						<input type="hidden" name="bnum" value="${board.num}" />
+						<input type="hidden" name="password" id="commentUpdatePassword_${c.cnum}" />
+
+						<button type="button" class="btn btn-outline-secondary btn-sm"
+								onclick="requestCommentUpdate(${c.cnum}, ${board.num})">
+							수정
+						</button>
+					</form>
+					<form id="deleteCommentForm_${c.cnum}" action="/comment/deleteComment" method="post" style="display:inline;">
+						<input type="hidden" name="cnum" value="${c.cnum}" />
+						<input type="hidden" name="bnum" value="${board.num}" />
+						<input type="hidden" name="password" id="commentDeletePassword_${c.cnum}" />
+
+						<button type="button" class="btn btn-outline-danger btn-sm"
+								onclick="deleteComment(${c.cnum}, ${board.num})">
+							삭제
+						</button>
+					</form>
+				</td>
+			</tr>
+		</c:forEach>
+		</tbody>
+	</table>
+</div>
+<div style="margin-bottom: 200px;"></div>
 <script>
-const init = function(){
-	$.getJSON("cList.do",
-			{bnum : $("#num").val()},
-			function(resp){
-				let str="<table class='table table-hover'>"
-				
-				$.each(resp.jarr, function(key, val){
-					str += "<tr>"
-					str += "<td>"+val.msg+"</td>"
-					str += "<td>"+val.userid
-					str += "<td>"+val.regdate+"</td>"
-					str += "</tr>"
-				})
-				
-				str +="</table>"
-				$(".cntSpan").html(resp.count);
-				$("#result").html(str);
-			} //콜백함수
-	); //getJSON
-	
-}
-$("#btnDelete").click(function(){
-	if(confirm("정말 삭제할까요?")){  //확인버튼 클릭
-		location.href="deleteBoard?num="+${board.num};
+
+$("#deleteBoard").click(function () {
+	if (confirm("정말 삭제할까요?")) {
+		const password = prompt("비밀번호를 입력하세요:");
+		if (password !== null && password.trim() !== "") {
+			$("#boardDeletePassword").val(password);
+			$("#deleteBoardForm").submit();
+		}
 	}
-})//btnDelete
-$("#btnComment").click(function(){
-	if($("#msg").val() == ""){
+});
+
+$("#btnComment").click(function () {
+	if ($("#message").val().trim() === "") {
 		alert("메세지를 입력하세요");
 		return;
 	}
-	$.ajax({
-		type:"post",
-		url : "insertComment",
-		data : {
-			msg :$("#msg").val(),
-			bnum : $("#num").val()
-		}
-	}) //ajax
-	.done(function(resp){
-		if(resp.trim() ==1){
-			alert("로그인하세요")
-			location.href="/member/login.do";
-		}else{
-			alert("성공")
-			$("#msg").val("")
-			init()
-		}
-	})
-	.fail(function(e){
-		alert("error : "+e);
-	})
-})
+	if ($("#userid").val().trim() === "") {
+		alert("작성자를 입력하세요");
+		return;
+	}
 
-init()
+	$.ajax({
+		type: "post",
+		url: "/comment/insertComment",
+		data: {
+			message: $("#message").val(),
+			bnum: $("#bnum").val(),
+			userid: $("#userid").val(),
+			password: $("#password").val()
+		}
+	})
+			.done(function (resp) {
+				alert("등록 완료");
+				$("#message").val("");
+				$("#userid").val("");
+				localStorage.setItem("scrollToComments", "true");
+				window.location.replace = resp;
+				location.reload();
+			})
+			.fail(function (e) {
+				alert("에러: " + e);
+				alert("에러: " + JSON.stringify(e));
+			});
+
+})
+function deleteComment(cnum, bnum) {
+	if (confirm("정말 삭제하시겠습니까?")) {
+		const password = prompt("비밀번호를 입력하세요:");
+		if (password !== null && password.trim() !== "") {
+			$("#commentDeletePassword_" + cnum).val(password);
+			$("#deleteCommentForm_" + cnum).submit();
+		}
+	}
+}
+function requestCommentUpdate(cnum, bnum) {
+	const password = prompt("수정하려면 비밀번호를 입력하세요:");
+	if (password !== null && password.trim() !== "") {
+		$("#commentUpdatePassword_" + cnum).val(password);
+		$("#updateCommentForm_" + cnum).submit();
+	}
+}
+window.onload = function () {
+	if (localStorage.getItem("scrollToComments") === "true") {
+		localStorage.removeItem("scrollToComments");
+		const commentRows = document.querySelectorAll(".comment-row");
+		if (commentRows.length > 0) {
+			const lastComment = commentRows[commentRows.length - 1];
+			lastComment.scrollIntoView({ behavior: "smooth" });
+		}
+	}
+};
 </script>
 
 </body>

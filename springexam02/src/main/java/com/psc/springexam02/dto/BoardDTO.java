@@ -3,6 +3,7 @@ package com.psc.springexam02.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -12,5 +13,6 @@ public class BoardDTO {
 	private String subject;
 	private String content;
 	private String regdate;
-
+	private String password;
+	private Timestamp updatedate;
 }

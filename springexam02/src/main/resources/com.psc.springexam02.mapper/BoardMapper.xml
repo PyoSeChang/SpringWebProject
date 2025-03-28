@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psc.springexam02.mapper.BoardMapper">
     <select id="insertBoard">
-        insert into board (userid, subject, content) values(#{userid}, #{subject}, #{content})
+        insert into board (userid, subject, content, password) values(#{userid}, #{subject}, #{content}, #{password})
     </select>
     <select id="showBoards" resultType="com.psc.springexam02.dto.BoardDTO">
         select * from board
@@ -58,6 +58,6 @@
         delete from board where num=#{num}
     </delete>
     <update id="updateBoard">
-        update board set subject=#{subject}, content=#{content} where num=#{num}
+        update board set subject=#{subject}, content=#{content}, updatedate=now() where num=#{num}
     </update>
 </mapper>

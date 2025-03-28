@@ -21,7 +21,12 @@
 	     <label for="content">content:</label>
 			  <textarea class="form-control" id="content" name="content" 
 			   placeholder="Content goes here" rows=5></textarea>
-	   </div>   
+	   </div>
+
+		 <div class="mb-3 mt-3">
+			 <label for="password">비밀번호</label>
+			 <input type="password" class="form-control" id="password" name="password" required />
+		 </div>
 	    
      <div  class="mt-3">
     	<button type="submit" class="btn btn-primary" id="btnSend">글쓰기</button>

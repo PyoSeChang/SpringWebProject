@@ -11,7 +11,9 @@ public interface CommentRepository {
     // 수정
     void dao_updateComment(CommentDTO comment);
     // 삭제
-    void dao_deleteComment(CommentDTO comment);
-    // 출력
-    List<CommentDTO> dao_showComments();
+    void dao_deleteComment(int cnum);
+    // 댓글 리스트 출력
+    List<CommentDTO> dao_showComments(int num);
+    // 댓글 하나 출력
+    CommentDTO dao_showComment(int cnum);
 }

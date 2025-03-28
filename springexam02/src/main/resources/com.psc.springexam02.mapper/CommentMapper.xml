@@ -4,6 +4,19 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psc.springexam02.mapper.CommentMapper">
     <insert id="insertComment">
-        insert into comment (bnum, userid, message) values(#{bnum}, #{userid}, #{message})
+        insert into comment (bnum, userid, message, password) values(#{bnum}, #{userid}, #{message}, #{password})
     </insert>
+    <select id="showComments" resultType="com.psc.springexam02.dto.CommentDTO">
+        select * from comment where bnum=#{bnum} order by regdate
+    </select>
+    <delete id="deleteComment">
+        delete from comment where cnum=#{cnum}
+    </delete>
+    <select id="showComment" resultType="com.psc.springexam02.dto.CommentDTO">
+        SELECT * FROM comment
+        WHERE cnum=#{cnum}
+    </select>
+    <update id="updateComment">
+        update comment set userid=#{userid}, message=#{message}, updatedate=now() where cnum=#{cnum}
+    </update>
 </mapper>

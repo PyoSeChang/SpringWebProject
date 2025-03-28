@@ -2,6 +2,7 @@ package com.psc.springexam02.controller;
 
 import com.psc.springexam02.model.board.BoardService;
 import com.psc.springexam02.dto.BoardDTO;
+import com.psc.springexam02.model.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
     // 추가페이지로 이동하기
     @GetMapping("insertBoard")
     public String toGoInsertBoard() {
@@ -48,6 +50,7 @@ public class BoardController {
     @GetMapping("showBoardDetail")
     public String showBoardDetail(@RequestParam(name="num") int num,Model model) {
         model.addAttribute("board", boardService.showBoardDetail(num));
+        model.addAttribute("commentList", commentService.showComments(num));
         return "board/showBoardDetail";
     }
     // 수정 페이지 이동
@@ -70,9 +73,18 @@ public class BoardController {
         return "redirect:/board/showBoardDetail";
     }
     // 삭제하기
-    @GetMapping("deleteBoard")
-    public String deleteBoard(@RequestParam(name="num") int num) {
-        boardService.deleteBoard(num);
-        return "redirect:/board/showBoards";
+    @PostMapping("deleteBoard")
+    public String deleteBoard(@RequestParam(name="num") int num,
+                              @RequestParam(name="password") String password,
+                              RedirectAttributes ra) {
+        BoardDTO board = boardService.showBoardDetail(num);
+
+        if (board != null && board.getPassword().equals(password)) {
+            boardService.deleteBoard(num);
+            return "redirect:/board/showBoards";
+        } else {
+            ra.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");
+            return "redirect:/board/showBoardDetail?num=" + num;
+        }
     }
 }

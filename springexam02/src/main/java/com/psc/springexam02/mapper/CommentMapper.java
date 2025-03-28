@@ -10,7 +10,9 @@ public interface CommentMapper {
     // 댓글 수정
     void updateComment(CommentDTO comment);
     // 댓글 삭제
-    void deleteComment(CommentDTO comment);
+    void deleteComment(int cnum);
     // 댓글 불러오기
-    List<CommentDTO> showComments();
+    List<CommentDTO> showComments(int num);
+    // 댓글 하나 출력
+    CommentDTO showComment(int cnum);
 }
