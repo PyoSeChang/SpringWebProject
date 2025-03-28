@@ -3,6 +3,7 @@ package com.psc.springexam02.controller;
 import com.psc.springexam02.model.board.BoardService;
 import com.psc.springexam02.dto.BoardDTO;
 import com.psc.springexam02.model.comment.CommentService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,10 +54,32 @@ public class BoardController {
         model.addAttribute("commentList", commentService.showComments(num));
         return "board/showBoardDetail";
     }
-    // 수정 페이지 이동
-    @GetMapping("updateBoard")
-    public String toGOUpdateBoard(@RequestParam(name="num") int num,Model model) {
-        model.addAttribute("board", boardService.showBoardDetail(num));
+    @PostMapping("/verifyUpdate")
+    public String verifyBoardPassword(@RequestParam("num") int num,
+                                      @RequestParam("password") String password,
+                                      HttpSession session,
+                                      RedirectAttributes ra) {
+        BoardDTO board = boardService.showBoardDetail(num);
+
+        if (board != null && board.getPassword().equals(password)) {
+            session.setAttribute("verifiedBoardNum", num);
+            return "redirect:/board/updateBoard?num=" + num;
+        } else {
+            ra.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");
+            return "redirect:/board/showBoardDetail?num=" + num;
+        }
+    }
+    @GetMapping("/updateBoard")
+    public String showUpdateBoardForm(@RequestParam("num") int num,
+                                      HttpSession session,
+                                      Model model) {
+        Object verified = session.getAttribute("verifiedBoardNum");
+        if (verified == null || !verified.equals(num)) {
+            return "redirect:/board/showBoardDetail?num=" + num;
+        }
+
+        BoardDTO board = boardService.showBoardDetail(num);
+        model.addAttribute("board", board);
         return "board/updateBoard";
     }
     // 수정하기

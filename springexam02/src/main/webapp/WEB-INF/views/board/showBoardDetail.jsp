@@ -24,8 +24,12 @@
 		<td colspan="3">${board.content }</td>
 		</tr>
 	</table>
-		<button type="button" class="btn btn-primary"
-		 onclick="location.href='updateBoard?num=${board.num}'">수정</button>
+	<!-- 수정 버튼 및 폼 -->
+	<form id="updateBoardForm" action="/board/verifyUpdate" method="post" style="display:inline;">
+		<input type="hidden" name="num" value="${board.num}" />
+		<input type="hidden" name="password" id="boardUpdatePassword" />
+		<button type="button" class="btn btn-primary" onclick="requestBoardUpdate(${board.num})">수정</button>
+	</form>
 	<form id="deleteBoardForm" action="/board/deleteBoard" method="post" style="display:inline;">
 		<input type="hidden" name="num" value="${board.num}" />
 		<input type="hidden" name="password" id="boardDeletePassword" />
@@ -92,7 +96,13 @@
 </div>
 <div style="margin-bottom: 200px;"></div>
 <script>
-
+function requestBoardUpdate(num) {
+	const password = prompt("수정을 위해 비밀번호를 입력하세요:");
+	if (password !== null && password.trim() !== "") {
+		document.getElementById("boardUpdatePassword").value = password;
+		document.getElementById("updateBoardForm").submit();
+	}
+}
 $("#deleteBoard").click(function () {
 	if (confirm("정말 삭제할까요?")) {
 		const password = prompt("비밀번호를 입력하세요:");
