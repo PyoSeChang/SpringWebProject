@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psc.springexam02.mapper.BoardMapper">
+    <select id="insertBoard">
+        insert into board (userid, subject, content) values(#{userid}, #{subject}, #{content})
+    </select>
+    <select id="showBoards" resultType="com.psc.springexam02.dto.BoardDTO">
+        select * from board
+    </select>
+    <select id="searchBoards" resultType="com.psc.springexam02.dto.BoardDTO">
+        SELECT * FROM board
+        <where>
+            <choose>
+                <when test="searchField == 'userid'">
+                    userid LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test="searchField == 'subject'">
+                    subject LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test="searchField == 'content'">
+                    content LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <otherwise>
+                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="countSearchedBoards" resultType="int">
+        select count(*) from board
+        <where>
+            <choose>
+                <when test="searchField == 'userid'">
+                    userid LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test="searchField == 'subject'">
+                    subject LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test="searchField == 'content'">
+                    content LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <otherwise>
+                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="countBoards" resultType="int">
+        select count(*) from board
+
+    </select>
+    <select id="showBoardDetail" resultType="com.psc.springexam02.dto.BoardDTO">
+        select * from board where num=#{num}
+    </select>
+    <delete id="deleteBoard">
+        delete from board where num=#{num}
+    </delete>
+    <update id="updateBoard">
+        update board set subject=#{subject}, content=#{content} where num=#{num}
+    </update>
+</mapper>

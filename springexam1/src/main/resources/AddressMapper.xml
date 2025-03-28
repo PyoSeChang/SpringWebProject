@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AddressMapper">
+<!--추가:insertData
+    전체보기:listData
+    상세보기:viewData
+    수정:updateData
+    삭제:deleteData
+    갯수:countData
+-->
+    <insert id="insertData" >
+        insert into addresstb (name, zipcode, address, tel) values(#{name}, #{zipcode}, #{address}, #{tel})
+    </insert>
+    <select id="listData" resultType="com.example.springexam1.dto.AddressDTO">
+        select * from addresstb
+    </select>
+    <select id="searchListData" resultType="com.example.springexam1.dto.AddressDTO">
+        SELECT * FROM addresstb
+        <where>
+            <choose>
+                <when test="field == 'name'">
+                    name LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'address'">
+                    address LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'zipcode'">
+                    zipcode LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'tel'">
+                    tel LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <otherwise>
+                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="countData" resultType="int">
+        select count(*) from addresstb
+    </select>
+    <select id="searchCountData" resultType="int">
+        SELECT count(*) FROM addresstb
+        <where>
+            <choose>
+                <when test="field == 'name'">
+                    name LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'address'">
+                    address LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'zipcode'">
+                    zipcode LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'tel'">
+                    tel LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <otherwise>
+                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="viewData" resultType="com.example.springexam1.dto.AddressDTO">
+        select * from addresstb where num=#{num}
+    </select>
+    <delete id="deleteData">
+        delete from addresstb where num=#{num}
+    </delete>
+    <update id="updateData">
+        update addresstb
+        set name = #{name}, zipcode=#{zipcode}, tel = #{tel}, address = #{address}
+        where num = #{num}
+    </update>
+    <select id="findUserData" resultType="String">
+        SELECT p.id
+        FROM addresstb a
+        JOIN persontb p ON a.name = p.name;
+    </select>
+</mapper>

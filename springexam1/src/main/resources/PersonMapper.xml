@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PersonMapper">
+
+<!--    추가      -->
+    <insert id="personInsert">
+        insert into persontb values(#{id}, #{password}, #{name}, #{gender}, #{job})
+    </insert>
+
+    <select id="personList" resultType="com.example.springexam1.dto.Person">
+        select * from persontb
+    </select>
+    <select id="searchList" resultType="com.example.springexam1.dto.Person">
+        SELECT * FROM persontb
+        <where>
+            <choose>
+                <when test="field == 'name'">
+                    name LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'job'">
+                    job LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'id'">
+                    id LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <otherwise>
+                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <select id="personCount" resultType="int">
+        select count(*) from persontb
+    </select>
+    <select id="searchCount" resultType="Integer">
+        SELECT COUNT(*) FROM persontb
+        <where>
+            <choose>
+                <when test="field == 'name'">
+                    name LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'id'">
+                    id LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="field == 'job'">
+                    job LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <otherwise>
+                    1 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <select id="detailData" resultType="com.example.springexam1.dto.Person">
+        select * from persontb where id=#{id}
+    </select>
+
+    <update id="updatePerson" parameterType="com.example.springexam1.dto.Person">
+        UPDATE persontb
+        SET name = #{name},
+        password = #{password},
+        gender = #{gender},
+        job = #{job}
+        WHERE id = #{id}
+    </update>
+    <delete id="deletePerson">
+        delete from persontb
+        where id= #{id}
+    </delete>
+    <select id="nametoAddrData" resultType="int">
+        SELECT a.num
+        FROM persontb p
+        JOIN addresstb a ON p.name = a.name;
+    </select>
+
+
+</mapper>
+

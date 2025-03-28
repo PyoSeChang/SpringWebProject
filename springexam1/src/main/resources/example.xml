@@ -1,0 +1,11 @@
+<sql id="search">
+    <where>
+        <if test="word!=null and field=='name'">
+
+        </if>
+    </where>
+</sql>
+
+<select id="searchCount" resultType="int">
+ select count(*) from persontb
+<include
