@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../includes/header.jsp" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="container mt-5">
 	<h2>Board VIEW</h2>
 	<input type="hidden" name="num" id="num" value="${board.num }">
@@ -13,7 +14,14 @@
 			<th>작성자</th>
 			<td>${board.userid }</td>
 			<th>작성일</th>
-			<td>${board.regdate }</td>
+			<td>  <c:choose>
+				<c:when test="${not empty board.updatedate}">
+					${board.updatedate} <span class="text-muted">(수정됨)</span>
+				</c:when>
+				<c:otherwise>
+					${board.regdate}
+				</c:otherwise>
+			</c:choose></td>
 		</tr>
 		<tr>
 			<th>글제목</th>
@@ -64,9 +72,19 @@
 		<tbody>
 		<c:forEach var="c" items="${commentList}">
 			<tr class="comment-row">
-				<td>${c.userid}</td>
+				<td>${c.userid}<c:if test="${fn:trim(c.userid) == fn:trim(board.userid)
+           and fn:trim(c.password) == fn:trim(board.password)}">
+					<span class="badge bg-primary">작성자</span>
+					</c:if></td>
 				<td>${c.message}</td>
-				<td>${c.regdate}</td>
+				<td><c:choose>
+					<c:when test="${not empty c.updatedate}">
+						${c.updatedate} <span class="text-muted">(수정됨)</span>
+					</c:when>
+					<c:otherwise>
+						${c.regdate}
+					</c:otherwise>
+				</c:choose></td>
 				<td>
 					<form id="updateCommentForm_${c.cnum}" action="/comment/verifyUpdate" method="post" style="display:inline;">
 						<input type="hidden" name="cnum" value="${c.cnum}" />
