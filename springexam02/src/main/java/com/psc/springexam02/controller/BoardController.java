@@ -1,10 +1,8 @@
 package com.psc.springexam02.controller;
 
-import com.psc.springexam02.model.BoardService;
-import com.psc.springexam02.model.BoardServiceInterface;
+import com.psc.springexam02.model.board.BoardService;
 import com.psc.springexam02.dto.BoardDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

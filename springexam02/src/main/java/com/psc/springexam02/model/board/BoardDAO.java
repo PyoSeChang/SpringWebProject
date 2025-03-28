@@ -1,4 +1,4 @@
-package com.psc.springexam02.model;
+package com.psc.springexam02.model.board;
 
 import com.psc.springexam02.dto.BoardDTO;
 import com.psc.springexam02.mapper.BoardMapper;

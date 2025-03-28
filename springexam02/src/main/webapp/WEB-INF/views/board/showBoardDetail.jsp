@@ -73,7 +73,7 @@ $("#btnComment").click(function(){
 	}
 	$.ajax({
 		type:"post",
-		url : "cInsert.do",
+		url : "insertComment",
 		data : {
 			msg :$("#msg").val(),
 			bnum : $("#num").val()

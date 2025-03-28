@@ -1,11 +1,10 @@
-package com.psc.springexam02.model;
+package com.psc.springexam02.model.board;
 
 import com.psc.springexam02.dto.BoardDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 @RequiredArgsConstructor
 @Service
