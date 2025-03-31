@@ -1,10 +1,12 @@
 package com.psc.springexam02.mapper.board;
 
 import com.psc.springexam02.dto.board.BoardDTO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Mapper
 public interface BoardMapper {
     // 추가
     void insertBoard(BoardDTO board);
