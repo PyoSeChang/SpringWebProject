@@ -48,9 +48,11 @@
 
 <div class="container mt-3">
 	<label for="userid">작성자:</label>
-	<input type="text" class="form-control" id="userid" name="userid" placeholder="이름 입력" required />
+	<input type="text" class="form-control" id="userid" name="userid" placeholder="이름 입력"
+		   value="${sessionScope.isPasswordVerified ? sessionScope.verifiedUserId : ''}" required />
 	<label for="password">비밀번호</label>
-	<input type="password" class="form-control" id="password" name="password" required />
+	<input type="password" class="form-control" id="password" name="password"
+		   value="${sessionScope.isPasswordVerified ? sessionScope.verifiedPassword : ''}"required />
 	<label for="message" class="mt-3">내용:</label>
 	<textarea class="form-control" id="message" name="message" placeholder="댓글 내용" rows="5" required></textarea>
 

@@ -9,7 +9,7 @@
 	     <div class="mb-3 mt-3">
 	      <label for="userid">User Id:</label>
 	      <input type="text" class="form-control" id="userid" placeholder="Enter userid" 
-	      name="userid">
+	      name="userid" value="${sessionScope.isPasswordVerified ? sessionScope.verifiedUserId : ''}">
 	    </div>
 	    
 	   <div class="mb-3 mt-3">
@@ -25,7 +25,8 @@
 
 		 <div class="mb-3 mt-3">
 			 <label for="password">비밀번호</label>
-			 <input type="password" class="form-control" id="password" name="password" required />
+			 <input type="password" class="form-control" id="password" name="password" required
+					value="${sessionScope.isPasswordVerified ? sessionScope.verifiedPassword : ''}"/>
 		 </div>
 	    
      <div  class="mt-3">

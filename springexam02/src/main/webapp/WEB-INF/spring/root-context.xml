@@ -27,5 +27,6 @@ serverTimezone=Asia/Seoul" />
         <property name="dataSource" ref="dataSource" />
         <property name="mapperLocations" value="classpath:/com.psc.springexam02.mapper/*.xml"/>
     </bean>
-    <mybatis-spring:scan base-package="com.psc.springexam02.mapper"/>
+    <mybatis-spring:scan base-package="com.psc.springexam02.mapper, com.psc.springexam02.mapper.board"/>
+
 </beans>

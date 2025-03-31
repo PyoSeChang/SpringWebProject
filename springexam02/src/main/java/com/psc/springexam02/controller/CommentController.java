@@ -27,10 +27,15 @@ public class CommentController {
     public String deleteComment(@RequestParam(name="cnum") int cnum,
                                 @RequestParam(name="bnum") int bnum,
                                 @RequestParam(name="password") String password,
-                                RedirectAttributes ra) {
+                                RedirectAttributes ra, HttpSession session) {
         CommentDTO comment = commentService.showComment(cnum);
 
         if (comment != null && comment.getPassword().equals(password)) {
+
+            session.setAttribute("isPasswordVerified", true);
+            session.setAttribute("verifiedUserId", comment.getUserid());
+            session.setAttribute("verifiedPassword", password);
+
             commentService.deleteComment(cnum);
             return "redirect:/board/showBoardDetail?num=" + bnum;
         } else {
@@ -48,6 +53,9 @@ public class CommentController {
 
         if (comment != null && comment.getPassword().equals(password)) {
             session.setAttribute("verifiedCommentCnum", cnum);
+            session.setAttribute("isPasswordVerified", true);
+            session.setAttribute("verifiedUserId", comment.getUserid());
+            session.setAttribute("verifiedPassword", password);
             return "redirect:/comment/updateComment?cnum=" + cnum + "&bnum=" + bnum;
         } else {
             ra.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");

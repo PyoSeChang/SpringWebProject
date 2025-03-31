@@ -1,6 +1,9 @@
 package com.psc.springexam02.model.board;
 
-import com.psc.springexam02.dto.BoardDTO;
+import com.psc.springexam02.dto.board.BoardDTO;
+import com.psc.springexam02.dto.board.BoardMetaDTO;
+import com.psc.springexam02.dto.board.BoardStatusDTO;
+import com.psc.springexam02.dto.board.BoardViewDTO;
 
 import java.util.List;
 
@@ -21,5 +24,14 @@ public interface BoardServiceInterface {
     void updateBoard(BoardDTO board);
     // 삭제
     void deleteBoard(int num);
+
+    // 메타 정보 가져오기
+    BoardMetaDTO getMeta(int num);
+
+    // Status 정보 가져오기
+    BoardStatusDTO getStatus(int num);
+
+    // BoardViewDTO 조립
+    BoardViewDTO assembleBoardViewDTO(int num);
 
 }

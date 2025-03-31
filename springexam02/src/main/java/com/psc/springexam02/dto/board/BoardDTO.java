@@ -1,6 +1,5 @@
-package com.psc.springexam02.dto;
+package com.psc.springexam02.dto.board;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Timestamp;

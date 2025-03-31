@@ -1,6 +1,6 @@
-package com.psc.springexam02.mapper;
+package com.psc.springexam02.mapper.board;
 
-import com.psc.springexam02.dto.BoardDTO;
+import com.psc.springexam02.dto.board.BoardDTO;
 
 import java.util.HashMap;
 import java.util.List;

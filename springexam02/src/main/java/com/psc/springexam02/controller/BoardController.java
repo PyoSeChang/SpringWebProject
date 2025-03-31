@@ -1,7 +1,8 @@
 package com.psc.springexam02.controller;
 
+import com.psc.springexam02.dto.board.BoardViewDTO;
 import com.psc.springexam02.model.board.BoardService;
-import com.psc.springexam02.dto.BoardDTO;
+import com.psc.springexam02.dto.board.BoardDTO;
 import com.psc.springexam02.model.comment.CommentService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,8 @@ public class BoardController {
     // 상세보기
     @GetMapping("showBoardDetail")
     public String showBoardDetail(@RequestParam(name="num") int num,Model model) {
-        model.addAttribute("board", boardService.showBoardDetail(num));
+        BoardViewDTO board=boardService.assembleBoardViewDTO(num);
+        model.addAttribute("board", board);
         model.addAttribute("commentList", commentService.showComments(num));
         return "board/showBoardDetail";
     }
@@ -63,6 +65,9 @@ public class BoardController {
 
         if (board != null && board.getPassword().equals(password)) {
             session.setAttribute("verifiedBoardNum", num);
+            session.setAttribute("isPasswordVerified", true);
+            session.setAttribute("verifiedUserId", board.getUserid());
+            session.setAttribute("verifiedPassword", password);
             return "redirect:/board/updateBoard?num=" + num;
         } else {
             ra.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");
@@ -77,6 +82,7 @@ public class BoardController {
         if (verified == null || !verified.equals(num)) {
             return "redirect:/board/showBoardDetail?num=" + num;
         }
+
 
         BoardDTO board = boardService.showBoardDetail(num);
         model.addAttribute("board", board);
@@ -97,12 +103,16 @@ public class BoardController {
     }
     // 삭제하기
     @PostMapping("deleteBoard")
-    public String deleteBoard(@RequestParam(name="num") int num,
+    public String deleteBoard( HttpSession session,@RequestParam(name="num") int num,
                               @RequestParam(name="password") String password,
                               RedirectAttributes ra) {
         BoardDTO board = boardService.showBoardDetail(num);
 
         if (board != null && board.getPassword().equals(password)) {
+
+            session.setAttribute("isPasswordVerified", true);
+            session.setAttribute("verifiedUserId", board.getUserid());
+            session.setAttribute("verifiedPassword", password);
             boardService.deleteBoard(num);
             return "redirect:/board/showBoards";
         } else {

@@ -2,14 +2,18 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.psc.springexam02.mapper.BoardMapper">
+<mapper namespace="com.psc.springexam02.mapper.board.BoardMapper">
     <select id="insertBoard">
         insert into board (userid, subject, content, password) values(#{userid}, #{subject}, #{content}, #{password})
     </select>
-    <select id="showBoards" resultType="com.psc.springexam02.dto.BoardDTO">
-        select * from board
+    <select id="showBoards" resultType="com.psc.springexam02.dto.board.BoardDTO">
+        SELECT
+            userid,
+            content,
+            subject
+        FROM board
     </select>
-    <select id="searchBoards" resultType="com.psc.springexam02.dto.BoardDTO">
+    <select id="searchBoards" resultType="com.psc.springexam02.dto.board.BoardDTO">
         SELECT * FROM board
         <where>
             <choose>
@@ -51,7 +55,7 @@
         select count(*) from board
 
     </select>
-    <select id="showBoardDetail" resultType="com.psc.springexam02.dto.BoardDTO">
+    <select id="showBoardDetail" resultType="com.psc.springexam02.dto.board.BoardDTO">
         select * from board where num=#{num}
     </select>
     <delete id="deleteBoard">

@@ -1,7 +1,11 @@
 package com.psc.springexam02.model.board;
 
-import com.psc.springexam02.dto.BoardDTO;
-import com.psc.springexam02.mapper.BoardMapper;
+import com.psc.springexam02.dto.board.BoardDTO;
+import com.psc.springexam02.dto.board.BoardMetaDTO;
+import com.psc.springexam02.dto.board.BoardStatusDTO;
+import com.psc.springexam02.mapper.board.BoardMapper;
+import com.psc.springexam02.mapper.board.BoardMetaMapper;
+import com.psc.springexam02.mapper.board.BoardStatusMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardDAO implements BoardRepository {
     private final BoardMapper boardMapper;
+    private final BoardMetaMapper boardMetaMapper;
+    private final BoardStatusMapper boardStatusMapper;
     @Override
     public void dao_insertBoard(BoardDTO board) {
         boardMapper.insertBoard(board);
@@ -49,6 +55,16 @@ public class BoardDAO implements BoardRepository {
     @Override
     public void dao_deleteBoard(int num) {
         boardMapper.deleteBoard(num);
+    }
+
+    @Override
+    public BoardMetaDTO dao_selectBoardMeta(int num) {
+        return boardMetaMapper.getMeta(num);
+    }
+
+    @Override
+    public BoardStatusDTO dao_selectBoardStatus(int num) {
+        return boardStatusMapper.getStatus(num);
     }
 
 
