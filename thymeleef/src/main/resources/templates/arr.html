@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 th:tel="${list}"></h1>
+<hr/>
+<h1>[[${list}]]</h1>
+
+<ul>
+    <li th:each="str:${list}">
+        <span th:text="${str}"></span>
+    </li>
+</ul>
+
+<ul>
+    <li th:each="str, status : ${list}">
+        <span>[[${status.index}]] - [[${str}]]</span> :
+        <span>[[${status.count}]] - [[${str}]]</span>
+    </li>
+</ul>
+</body>
+</html>

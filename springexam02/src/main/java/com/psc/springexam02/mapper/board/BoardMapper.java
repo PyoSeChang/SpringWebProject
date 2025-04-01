@@ -13,15 +13,25 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
     // 추가
-    void insertBoard(BoardDTO board);
-    // 전체보기
-    List<BoardDTO> showBoards();
-    // 검색 하기
-    List<BoardDTO> searchBoards(HashMap<String, String> map);
-    // 갯수 세기
-    int countBoards();
-    // 검색 갯수 세기
-    int countSearchedBoards(HashMap<String, String> map);
+    void insertBoard(BoardViewDTO board);
+    List<BoardViewDTO> selectBoardsByCategory(
+            @Param("category") String category,
+            @Param("offset") int offset,
+            @Param("limit") int limit);
+
+    List<BoardViewDTO> selectBoardsByCategoryWithSearch(
+            @Param("category") String category,
+            @Param("field") String field,
+            @Param("word") String word,
+            @Param("offset") int offset,
+            @Param("limit") int limit);
+
+    int countBoardsByCategory(@Param("category") String category);
+
+    int countBoardsByCategoryWithSearch(
+            @Param("category") String category,
+            @Param("field") String field,
+            @Param("word") String word);
     // 상세 보기
     BoardViewDTO showBoardDetail(@Param("num")int num);
     // 수정

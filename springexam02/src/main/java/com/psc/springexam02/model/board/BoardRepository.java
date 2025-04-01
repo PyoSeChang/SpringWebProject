@@ -10,15 +10,11 @@ import java.util.List;
 
 public interface BoardRepository {
     // 추가
-    void dao_insertBoard(BoardDTO board);
-    // 전체보기
-    List<BoardDTO> dao_showBoards();
-    // 검색보기
-    List<BoardDTO> dao_showBoards(HashMap<String, String> map);
-    // 갯수
-    int dao_countBoards();
-    // 검색한 보드 갯수
-    int dao_countBoards(HashMap<String, String> map);
+    void dao_insertBoard(BoardViewDTO board);
+    List<BoardViewDTO> selectBoardsByCategory(String category, int offset, int limit);
+    List<BoardViewDTO> selectBoardsByCategory(String category, String field, String word, int offset, int limit);
+    int countBoardsByCategory(String category);
+    int countBoardsByCategory(String category, String field, String word);
     // 상세보기
     BoardViewDTO dao_showBoardDetail(int num);
     // 수정
@@ -32,6 +28,11 @@ public interface BoardRepository {
     // Status 정보 가져오기
     BoardStatusDTO dao_selectBoardStatus(int num);
 
+    // update LikeCount
+    void dao_updateLikeCount(int num, boolean isIncrement);
+    // update DislikeCount
+    void dao_updateDislikeCount(int num, boolean isIncrement);
 
 
+    void dao_updateReadCount(int num);
 }

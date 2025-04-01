@@ -12,4 +12,21 @@
        FROM board
        WHERE num=#{num}
    </select>
+    <update id="updateLikeCount">
+        UPDATE board
+        SET likecount = likecount + #{amount}
+        WHERE num = #{num}
+    </update>
+
+    <update id="updateDislikeCount">
+        UPDATE board
+        SET dislikecount = dislikecount + #{amount}
+        WHERE num = #{num}
+    </update>
+
+    <update id="updateReadCount">
+        UPDATE board
+        SET readcount = readcount + 1
+        WHERE num = #{num}
+    </update>
 </mapper>

@@ -22,31 +22,37 @@ public class BoardDAO implements BoardRepository {
     private final BoardMetaMapper boardMetaMapper;
     private final BoardStatusMapper boardStatusMapper;
     @Override
-    public void dao_insertBoard(BoardDTO board) {
+    public void dao_insertBoard(BoardViewDTO board) {
         boardMapper.insertBoard(board);
     }
 
     @Override
-    public List<BoardDTO> dao_showBoards() {
-        return boardMapper.showBoards();
+    public List<BoardViewDTO> selectBoardsByCategory(String category, int offset, int limit) {
+        return boardMapper.selectBoardsByCategory(category, offset, limit);
     }
+
     @Override
-    public List<BoardDTO> dao_showBoards(HashMap<String, String> map) {
-        return boardMapper.searchBoards(map);
+    public List<BoardViewDTO> selectBoardsByCategory(String category, String field, String word, int offset, int limit) {
+        return boardMapper.selectBoardsByCategoryWithSearch(category, field, word, offset, limit);
     }
+
     @Override
-    public int dao_countBoards(HashMap<String, String> map) {
-        return boardMapper.countSearchedBoards(map);
+    public int countBoardsByCategory(String category) {
+        return boardMapper.countBoardsByCategory(category);
     }
+
+    @Override
+    public int countBoardsByCategory(String category, String field, String word) {
+        return boardMapper.countBoardsByCategoryWithSearch(category, field, word);
+    }
+
+
     @Override
     public BoardViewDTO dao_showBoardDetail(int num) {
         return boardMapper.showBoardDetail(num);
     }
 
-    @Override
-    public int dao_countBoards() {
-        return boardMapper.countBoards();
-    }
+
 
     @Override
     public void dao_updateBoard(BoardDTO board) {
@@ -71,6 +77,23 @@ public class BoardDAO implements BoardRepository {
     @Override
     public BoardStatusDTO dao_selectBoardStatus(int num) {
         return boardStatusMapper.selectBoardStatus(num);
+    }
+
+    @Override
+    public void dao_updateLikeCount(int num, boolean isIncrement) {
+        int amount = isIncrement ? 1 : -1;
+        boardStatusMapper.updateLikeCount(num, amount);  // ✔️ num 전달
+    }
+
+    @Override
+    public void dao_updateDislikeCount(int num, boolean isIncrement) {
+        int amount = isIncrement ? 1 : -1;
+        boardStatusMapper.updateDislikeCount(num, amount);  // ✔️ num 전달
+    }
+
+    @Override
+    public void dao_updateReadCount(int num) {
+        boardStatusMapper.updateReadCount(num);
     }
 
 

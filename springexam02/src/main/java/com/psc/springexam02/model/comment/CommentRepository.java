@@ -18,4 +18,6 @@ public interface CommentRepository {
     CommentDTO dao_showComment(int cnum);
     // 댓글 모두 삭제
     void dao_deleteAllComments(int num);
+    // 댓글 카운트 업데이트
+    void dao_updateCommentCount(int cnum, boolean amount);
 }

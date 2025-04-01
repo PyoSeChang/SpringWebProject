@@ -24,4 +24,9 @@
         FROM comment
         WHERE bnum=#{num}
     </delete>
+    <update id="updateCommentCount">
+        UPDATE board
+        SET commentcount = commentcount + #{amount}
+        WHERE num = #{bnum}
+    </update>
 </mapper>

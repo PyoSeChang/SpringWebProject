@@ -7,5 +7,13 @@
 <body>
 <h1 th:text="${message}"></h1>
 <h1>[[${message}]]</h1>
+<div th:with="num1=${10}, num2=${20}, num3=${30}">
+    <h4 th:text="${num1+num2+num3}"></h4>
+    <hr>
+    <h4>[[${num1+num2+num3}]]</h4>
+    <hr>
+    <span th:if="${num1>num2}">[[${num1}]]</span>
+    <span th:unless="${num1>num2}">[[${num2}]]</span>
+</div>
 </body>
 </html>

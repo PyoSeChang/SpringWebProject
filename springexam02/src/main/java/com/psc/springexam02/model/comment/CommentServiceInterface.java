@@ -17,5 +17,8 @@ public interface CommentServiceInterface {
     CommentDTO showComment(int cnum);
     // 댓글 모두 삭제
     void deleteAllComments(int num);
+    // 댓글 count
+    void increaseCommentCount(int cnum);
+    void decreaseCommentCount(int cnum);
 }
 

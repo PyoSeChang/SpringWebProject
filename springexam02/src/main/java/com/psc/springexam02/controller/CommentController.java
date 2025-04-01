@@ -20,6 +20,7 @@ public class CommentController {
     @PostMapping("/insertComment")
     public String insertComment(@ModelAttribute CommentDTO comment, RedirectAttributes rttr) {
         commentService.insertComment(comment);
+        commentService.increaseCommentCount(comment.getBnum());
         rttr.addAttribute("num", comment.getBnum());
         return "redirect:/board/showBoardDetail";
     }
@@ -37,6 +38,7 @@ public class CommentController {
             session.setAttribute("verifiedPassword", password);
 
             commentService.deleteComment(cnum);
+            commentService.decreaseCommentCount(bnum);
             return "redirect:/board/showBoardDetail?num=" + bnum;
         } else {
             ra.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");

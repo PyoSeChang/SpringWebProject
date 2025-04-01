@@ -9,7 +9,20 @@
 		<tr>
 			<th>글번호</th>
 			<td>${board.num }</td>
+			<th>게시판</th>
+			<td>
+				<span class="badge bg-info text-dark ms-2">
+					<c:choose>
+						<c:when test="${board.category == 'notice'}">공지사항</c:when>
+						<c:when test="${board.category == 'qna'}">Q&amp;A</c:when>
+						<c:when test="${board.category == 'free'}">자유 게시판</c:when>
+						<c:when test="${board.category == 'study'}">스터디</c:when>
+						<c:otherwise>기타</c:otherwise>
+					</c:choose>
+				</span>
+			</td>
 		</tr>
+
 		<tr>
 			<th>작성자</th>
 			<td>${board.userid }</td>
@@ -30,6 +43,38 @@
 		<tr>
 			<th>내용</th>
 		<td colspan="3">${board.content }</td>
+		</tr>
+		<tr>
+			<th>태그</th>
+			<td colspan="3">
+				<c:forEach var="tags" items="${fn:split(board.tags, ',')}">
+					<span class="badge bg-secondary">#${fn:trim(tags)}</span>
+				</c:forEach>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="text-center">
+				<span>조회수: ${board.readcount}</span>
+				<div class="d-flex justify-content-center gap-3">
+					<!-- 좋아요 버튼 -->
+					<form action="/board/react" method="post">
+						<input type="hidden" name="num" value="${board.num}" />
+						<input type="hidden" name="reactionType" value="like" />
+						<button type="submit" class="btn btn-outline-success">
+							👍 좋아요 <span>${board.likecount}</span>
+						</button>
+					</form>
+
+					<!-- 싫어요 버튼 -->
+					<form action="/board/react" method="post">
+						<input type="hidden" name="num" value="${board.num}" />
+						<input type="hidden" name="reactionType" value="dislike" />
+						<button type="submit" class="btn btn-outline-danger">
+							👎 싫어요 <span>${board.dislikecount}</span>
+						</button>
+					</form>
+				</div>
+			</td>
 		</tr>
 	</table>
 	<!-- 수정 버튼 및 폼 -->

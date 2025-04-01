@@ -1,6 +1,7 @@
 package com.psc.springexam02.mapper;
 
 import com.psc.springexam02.dto.CommentDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface CommentMapper {
     CommentDTO showComment(int cnum);
     // 댓글 모두 삭제
     void deleteAllComments(int num);
+    //
+    void updateCommentCount(@Param("bnum")int bnum, @Param("amount")int amount);
 }

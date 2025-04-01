@@ -11,7 +11,17 @@
 	      <input type="text" class="form-control" id="userid" placeholder="Enter userid" 
 	      name="userid" value="${sessionScope.isPasswordVerified ? sessionScope.verifiedUserId : ''}">
 	    </div>
-	    
+		 <!-- ✅ 카테고리 select box -->
+		 <div class="mb-3 mt-3">
+		 <label for="category">게시판 종류:</label>
+		 <select name="category" id="category" required>
+			 <option value="">-- 선택하세요 --</option>
+			 <option value="notice">공지사항</option>
+			 <option value="qna">Q&A</option>
+			 <option value="free">자유 게시판</option>
+			 <option value="study">스터디</option>
+		 </select>
+		 </div>
 	   <div class="mb-3 mt-3">
 	      <label for="subject">Subject:</label>
 	      <input type="text" class="form-control" id="subject" placeholder="Enter subject" name="subject">
@@ -28,7 +38,9 @@
 			 <input type="password" class="form-control" id="password" name="password" required
 					value="${sessionScope.isPasswordVerified ? sessionScope.verifiedPassword : ''}"/>
 		 </div>
-	    
+	    <div class="mb-3 mt-3">
+			<input type="text" name="tags" placeholder="태그 (콤마로 구분)" />
+		</div>
      <div  class="mt-3">
     	<button type="submit" class="btn btn-primary" id="btnSend">글쓰기</button>
     </div>

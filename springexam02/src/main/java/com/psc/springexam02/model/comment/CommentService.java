@@ -38,4 +38,14 @@ public class CommentService implements CommentServiceInterface {
     public void deleteAllComments(int num) {
         commentDAO.dao_deleteAllComments(num);
     }
+
+    @Override
+    public void increaseCommentCount(int cnum) {
+        commentDAO.dao_updateCommentCount(cnum, true);
+    }
+
+    @Override
+    public void decreaseCommentCount(int cnum) {
+        commentDAO.dao_updateCommentCount(cnum, false);
+    }
 }

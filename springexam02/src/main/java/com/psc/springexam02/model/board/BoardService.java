@@ -1,9 +1,6 @@
 package com.psc.springexam02.model.board;
 
-import com.psc.springexam02.dto.board.BoardDTO;
-import com.psc.springexam02.dto.board.BoardMetaDTO;
-import com.psc.springexam02.dto.board.BoardStatusDTO;
-import com.psc.springexam02.dto.board.BoardViewDTO;
+import com.psc.springexam02.dto.board.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,33 +11,33 @@ import java.util.List;
 public class BoardService implements BoardServiceInterface {
     private final BoardDAO boardDAO;
     @Override
-    public void insertBoard(BoardDTO board) {
+    public void insertBoard(BoardViewDTO board) {
         boardDAO.dao_insertBoard(board);
     }
 
     @Override
-    public List<BoardDTO> showBoards() {
-        return boardDAO.dao_showBoards();
-    }
-    @Override
-    public List <BoardDTO> showBoards(String searchField, String searchWord) {
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("searchField", searchField);
-        map.put("searchWord", searchWord);
-        return boardDAO.dao_showBoards(map);
+    public BoardPageDTO selectBoardsByCategory(String category, int offset, int limit) {
+        List<BoardViewDTO> list = boardDAO.selectBoardsByCategory(category, offset, limit);
+        int count = boardDAO.countBoardsByCategory(category);
+
+        BoardPageDTO dto = new BoardPageDTO();
+        dto.setBoardList(list);
+        dto.setTotalCount(count);
+        return dto;
     }
 
     @Override
-    public int countBoards() {
-        return boardDAO.dao_countBoards();
+    public BoardPageDTO selectBoardsByCategory(String category, String field, String word, int offset, int limit) {
+        List<BoardViewDTO> list = boardDAO.selectBoardsByCategory(category, field, word, offset, limit);
+        int count = boardDAO.countBoardsByCategory(category, field, word);
+
+        BoardPageDTO dto = new BoardPageDTO();
+        dto.setBoardList(list);
+        dto.setTotalCount(count);
+        return dto;
     }
-    @Override
-    public int countBoards(String searchField, String searchWord) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("searchField", searchField);
-        map.put("searchWord", searchWord);
-        return boardDAO.dao_countBoards(map);
-    }
+
+
     @Override
     public BoardViewDTO showBoardDetail(int num) {
         return boardDAO.dao_showBoardDetail(num);
@@ -96,6 +93,31 @@ public class BoardService implements BoardServiceInterface {
         dto.setCommentcount(status.getCommentcount());
 
         return dto;
+    }
+
+    @Override
+    public void increaseLikeCount(int num) {
+        boardDAO.dao_updateLikeCount(num, true);
+    }
+
+    @Override
+    public void decreaseLikeCount(int num) {
+        boardDAO.dao_updateLikeCount(num, false);
+    }
+
+    @Override
+    public void increaseDislikeCount(int num) {
+        boardDAO.dao_updateDislikeCount(num, true);
+    }
+
+    @Override
+    public void decreaseDislikeCount(int num) {
+        boardDAO.dao_updateDislikeCount(num, false);
+    }
+
+    @Override
+    public void increaseReadCount(int num) {
+        boardDAO.dao_updateReadCount(num);
     }
 
 }

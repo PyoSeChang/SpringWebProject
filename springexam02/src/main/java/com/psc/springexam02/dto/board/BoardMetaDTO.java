@@ -9,7 +9,7 @@ import java.util.List;
 public class BoardMetaDTO {
     private int num;
     private String category;
-    private List<String> tags;
+    private String tags;
     private Timestamp regdate;
     private Timestamp updatedate;
 

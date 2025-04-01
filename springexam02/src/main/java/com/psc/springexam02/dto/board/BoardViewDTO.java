@@ -18,7 +18,7 @@ public class BoardViewDTO {
 
     // 메타 정보
     private String category;
-    private List<String> tags;
+    private String tags;
     private Timestamp regdate;
     private Timestamp updatedate;
 

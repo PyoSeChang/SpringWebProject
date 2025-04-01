@@ -1,5 +1,6 @@
 package com.psc.springexam02.controller;
 
+import com.psc.springexam02.dto.board.BoardPageDTO;
 import com.psc.springexam02.dto.board.BoardViewDTO;
 import com.psc.springexam02.model.board.BoardService;
 import com.psc.springexam02.dto.board.BoardDTO;
@@ -26,34 +27,58 @@ public class BoardController {
         return "board/insertBoard";
     }
     @PostMapping("insertBoard")
-    public String insertBoard(@ModelAttribute BoardDTO board) {
+    public String insertBoard(@ModelAttribute BoardViewDTO board) {
         boardService.insertBoard(board);
         return "redirect:/board/showBoards";
     }
-    // 전체보기
     @GetMapping("showBoards")
-    public String showBoards(@RequestParam(name="searchField", required = false)String searchField,
-                             @RequestParam(name="searchWord", required = false)String searchWord,Model model) {
-        List<BoardDTO> blist;
-        int count;
-        if (searchWord != null && !searchWord.trim().isEmpty()) {
-            blist = boardService.showBoards(searchField, searchWord);
-            count = boardService.countBoards(searchField, searchWord);
+    public String showBoards(
+            @RequestParam(name = "category", defaultValue = "free") String category,
+            @RequestParam(name = "searchField", required = false) String searchField,
+            @RequestParam(name = "searchWord", required = false) String searchWord,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            Model model
+    ) {
+        final int pageSize = 10;
+        int offset = (page - 1) * pageSize;
+
+        BoardPageDTO result;
+
+        boolean isSearching = (searchWord != null && !searchWord.trim().isEmpty());
+
+        if (isSearching) {
+            result = boardService.selectBoardsByCategory(category, searchField, searchWord, offset, pageSize);
         } else {
-            // 검색어 없으면 전체 조회
-            blist = boardService.showBoards();
-            count = boardService.countBoards();
+            result = boardService.selectBoardsByCategory(category, offset, pageSize);
         }
-        model.addAttribute("blist", blist);
-        model.addAttribute("count", count);
+
+        int totalPages = (int) Math.ceil((double) result.getTotalCount() / pageSize);
+
+        model.addAttribute("boardList", result.getBoardList());
+        model.addAttribute("count", result.getTotalCount());
+        model.addAttribute("category", category);
+        model.addAttribute("searchField", searchField);
+        model.addAttribute("searchWord", searchWord);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "board/showBoards";
     }
-    // 상세보기
+
     @GetMapping("showBoardDetail")
-    public String showBoardDetail(@RequestParam(name="num") int num,Model model) {
-        BoardViewDTO board=boardService.assembleBoardViewDTO(num);
+    public String showBoardDetail(@RequestParam(name = "num") int num, Model model, HttpSession session) {
+        String sessionKey = "viewed_board_" + num;
+
+        // 같은 세션 내에서 중복 조회 방지
+        if (session.getAttribute(sessionKey) == null) {
+            boardService.increaseReadCount(num);  // 조회수 증가
+            session.setAttribute(sessionKey, true);
+        }
+
+        BoardViewDTO board = boardService.assembleBoardViewDTO(num);
         model.addAttribute("board", board);
         model.addAttribute("commentList", commentService.showComments(num));
+
         return "board/showBoardDetail";
     }
     @PostMapping("/verifyUpdate")
@@ -120,5 +145,54 @@ public class BoardController {
             ra.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");
             return "redirect:/board/showBoardDetail?num=" + num;
         }
+    }
+
+    @PostMapping("react")
+    public String reactToBoard(
+            @RequestParam("num") int num,
+            @RequestParam("reactionType") String reactionType,
+            HttpSession session
+    ) {
+        String sessionKey = "reaction_board_" + num;
+        String prevReaction = (String) session.getAttribute(sessionKey);
+
+        if (prevReaction != null) {
+            // 동일 반응이면 아무것도 안 함
+            if (prevReaction.equals(reactionType)) {
+                return "redirect:/board/showBoardDetail?num=" + num;
+            } else {
+                // 다른 반응으로 전환 (like ↔ dislike)
+                if ("like".equals(reactionType)) {
+                    boardService.decreaseDislikeCount(num);
+                    boardService.increaseLikeCount(num);
+                    session.setAttribute(sessionKey, "like");
+                } else if ("dislike".equals(reactionType)) {
+                    boardService.decreaseLikeCount(num);
+                    boardService.increaseDislikeCount(num);
+                    session.setAttribute(sessionKey, "dislike");
+                }
+                return "redirect:/board/showBoardDetail?num=" + num;
+            }
+        } else {
+            // 처음 반응 등록
+            if ("like".equals(reactionType)) {
+                boardService.increaseLikeCount(num);
+                session.setAttribute(sessionKey, "like");
+            } else if ("dislike".equals(reactionType)) {
+                boardService.increaseDislikeCount(num);
+                session.setAttribute(sessionKey, "dislike");
+            }
+            return "redirect:/board/showBoardDetail?num=" + num;
+        }
+    }
+    @GetMapping("/resetAllBoardSession")
+    public String resetAllBoardSession(HttpSession session) {
+        // 세션에 저장된 reaction, view 관련 속성 전체 제거
+        session.getAttributeNames().asIterator().forEachRemaining(attrName -> {
+            if (attrName.startsWith("reaction_board_") || attrName.startsWith("viewed_board_")) {
+                session.removeAttribute(attrName);
+            }
+        });
+        return "redirect:/board/showBoards"; // 다시 게시판으로
     }
 }

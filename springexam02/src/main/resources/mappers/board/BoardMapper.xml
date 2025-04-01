@@ -4,53 +4,71 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psc.springexam02.mapper.board.BoardMapper">
     <select id="insertBoard">
-        insert into board (userid, subject, content, password) values(#{userid}, #{subject}, #{content}, #{password})
+        insert into board (userid, category, tags, subject, content, password) values(#{userid}, #{category}, #{tags}, #{subject}, #{content}, #{password})
     </select>
     <select id="showBoards" resultType="com.psc.springexam02.dto.board.BoardViewDTO">
         select * from board
     </select>
-    <select id="searchBoards" resultType="com.psc.springexam02.dto.board.BoardViewDTO">
+    <!-- 1. 카테고리 목록 조회 -->
+    <select id="selectBoardsByCategory" resultType="com.psc.springexam02.dto.board.BoardViewDTO">
+        SELECT * FROM board
+        WHERE category = #{category}
+        ORDER BY num DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 2. 카테고리 + 검색 조건 목록 조회 -->
+    <select id="selectBoardsByCategoryWithSearch" resultType="com.psc.springexam02.dto.board.BoardViewDTO">
         SELECT * FROM board
         <where>
-            <choose>
-                <when test="searchField == 'userid'">
-                    userid LIKE CONCAT('%', #{searchWord}, '%')
-                </when>
-                <when test="searchField == 'subject'">
-                    subject LIKE CONCAT('%', #{searchWord}, '%')
-                </when>
-                <when test="searchField == 'content'">
-                    content LIKE CONCAT('%', #{searchWord}, '%')
-                </when>
-                <otherwise>
-                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
-                </otherwise>
-            </choose>
+            category = #{category}
+            <if test="word != null and word.trim() != ''">
+                <choose>
+                    <when test="field == 'title'">
+                        AND title LIKE CONCAT('%', #{word}, '%')
+                    </when>
+                    <when test="field == 'writer'">
+                        AND writer LIKE CONCAT('%', #{word}, '%')
+                    </when>
+                    <otherwise>
+                        AND (title LIKE CONCAT('%', #{word}, '%')
+                        OR writer LIKE CONCAT('%', #{word}, '%'))
+                    </otherwise>
+                </choose>
+            </if>
         </where>
+        ORDER BY num DESC
+        LIMIT #{limit} OFFSET #{offset}
     </select>
-    <select id="countSearchedBoards" resultType="int">
-        select count(*) from board
-        <where>
-            <choose>
-                <when test="searchField == 'userid'">
-                    userid LIKE CONCAT('%', #{searchWord}, '%')
-                </when>
-                <when test="searchField == 'subject'">
-                    subject LIKE CONCAT('%', #{searchWord}, '%')
-                </when>
-                <when test="searchField == 'content'">
-                    content LIKE CONCAT('%', #{searchWord}, '%')
-                </when>
-                <otherwise>
-                    1 = 1  <!-- 기본 조건 (혹시 모를 오류 방지용) -->
-                </otherwise>
-            </choose>
-        </where>
-    </select>
-    <select id="countBoards" resultType="int">
-        select count(*) from board
 
+    <!-- 3. 카테고리 게시글 수 카운트 -->
+    <select id="countBoardsByCategory" resultType="int">
+        SELECT COUNT(*) FROM board
+        WHERE category = #{category}
     </select>
+
+    <!-- 4. 카테고리 + 검색 조건 게시글 수 카운트 -->
+    <select id="countBoardsByCategoryWithSearch" resultType="int">
+        SELECT COUNT(*) FROM board
+        <where>
+            category = #{category}
+            <if test="word != null and word.trim() != ''">
+                <choose>
+                    <when test="field == 'title'">
+                        AND title LIKE CONCAT('%', #{word}, '%')
+                    </when>
+                    <when test="field == 'writer'">
+                        AND writer LIKE CONCAT('%', #{word}, '%')
+                    </when>
+                    <otherwise>
+                        AND (title LIKE CONCAT('%', #{word}, '%')
+                        OR writer LIKE CONCAT('%', #{word}, '%'))
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
     <select id="showBoardDetail" resultType="com.psc.springexam02.dto.board.BoardViewDTO">
         select * from board where num=#{num}
     </select>

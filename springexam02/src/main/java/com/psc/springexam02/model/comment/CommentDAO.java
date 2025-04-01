@@ -41,4 +41,14 @@ public class CommentDAO implements CommentRepository {
     public void dao_deleteAllComments(int num) {
         commentMapper.deleteAllComments(num);
     }
+
+    @Override
+    public void dao_updateCommentCount(int cnum, boolean flag) {
+        int amount;
+        if (flag==true) {
+            commentMapper.updateCommentCount(cnum,1);
+        } else {
+            commentMapper.updateCommentCount(cnum,-1);
+        }
+    }
 }
