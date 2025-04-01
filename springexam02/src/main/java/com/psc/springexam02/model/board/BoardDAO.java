@@ -3,6 +3,7 @@ package com.psc.springexam02.model.board;
 import com.psc.springexam02.dto.board.BoardDTO;
 import com.psc.springexam02.dto.board.BoardMetaDTO;
 import com.psc.springexam02.dto.board.BoardStatusDTO;
+import com.psc.springexam02.dto.board.BoardViewDTO;
 import com.psc.springexam02.mapper.board.BoardMapper;
 import com.psc.springexam02.mapper.board.BoardMetaMapper;
 import com.psc.springexam02.mapper.board.BoardStatusMapper;
@@ -38,7 +39,7 @@ public class BoardDAO implements BoardRepository {
         return boardMapper.countSearchedBoards(map);
     }
     @Override
-    public BoardDTO dao_showBoardDetail(int num) {
+    public BoardViewDTO dao_showBoardDetail(int num) {
         return boardMapper.showBoardDetail(num);
     }
 
@@ -58,13 +59,18 @@ public class BoardDAO implements BoardRepository {
     }
 
     @Override
+    public BoardDTO dao_selectBoard(int num) {
+        return boardMapper.selectBoard(num);
+    }
+
+    @Override
     public BoardMetaDTO dao_selectBoardMeta(int num) {
-        return boardMetaMapper.getMeta(num);
+        return boardMetaMapper.selectBoardMeta(num);
     }
 
     @Override
     public BoardStatusDTO dao_selectBoardStatus(int num) {
-        return boardStatusMapper.getStatus(num);
+        return boardStatusMapper.selectBoardStatus(num);
     }
 
 

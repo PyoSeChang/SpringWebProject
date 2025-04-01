@@ -37,14 +37,14 @@
 		  			<td>${board.num}</td>
 		  			<td><a href="showBoardDetail?num=${board.num}">${board.subject }</a></td>
 		  			<td>${board.userid }</td>
-<%--		  			<td>  <c:choose>--%>
-<%--						<c:when test="${not empty board.updatedate}">--%>
-<%--							${board.updatedate} <span class="text-muted">(수정됨)</span>--%>
-<%--						</c:when>--%>
-<%--						<c:otherwise>--%>
-<%--							${board.regdate}--%>
-<%--						</c:otherwise>--%>
-<%--					</c:choose></td>--%>
+		  			<td>  <c:choose>
+						<c:when test="${not empty board.updatedate}">
+							${board.updatedate} <span class="text-muted">(수정됨)</span>
+						</c:when>
+						<c:otherwise>
+							${board.regdate}
+						</c:otherwise>
+					</c:choose></td>
 		  	</tr>
 		  	
 		</c:forEach>

@@ -3,12 +3,13 @@
         PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psc.springexam02.mapper.board.BoardMetaMapper">
-    <select id="getMeta" resultType="com.psc.springexam02.dto.board.BoardMetaDTO">
+    <select id="selectBoardMeta" resultType="com.psc.springexam02.dto.board.BoardMetaDTO">
         SELECT
             category,
             tags,
             regdate,
             updatedate
         FROM board
+        WHERE num=#{num}
     </select>
 </mapper>

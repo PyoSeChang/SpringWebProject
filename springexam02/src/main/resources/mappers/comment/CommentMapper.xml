@@ -19,4 +19,9 @@
     <update id="updateComment">
         update comment set userid=#{userid}, message=#{message}, updatedate=now() where cnum=#{cnum}
     </update>
+    <delete id="deleteAllComments">
+        DELETE
+        FROM comment
+        WHERE bnum=#{num}
+    </delete>
 </mapper>

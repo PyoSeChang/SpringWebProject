@@ -16,4 +16,6 @@ public interface CommentRepository {
     List<CommentDTO> dao_showComments(int num);
     // 댓글 하나 출력
     CommentDTO dao_showComment(int cnum);
+    // 댓글 모두 삭제
+    void dao_deleteAllComments(int num);
 }

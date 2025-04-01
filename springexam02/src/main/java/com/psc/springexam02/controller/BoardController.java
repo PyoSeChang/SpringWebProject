@@ -61,7 +61,7 @@ public class BoardController {
                                       @RequestParam("password") String password,
                                       HttpSession session,
                                       RedirectAttributes ra) {
-        BoardDTO board = boardService.showBoardDetail(num);
+        BoardViewDTO board = boardService.showBoardDetail(num);
 
         if (board != null && board.getPassword().equals(password)) {
             session.setAttribute("verifiedBoardNum", num);
@@ -84,7 +84,7 @@ public class BoardController {
         }
 
 
-        BoardDTO board = boardService.showBoardDetail(num);
+        BoardViewDTO board = boardService.showBoardDetail(num);
         model.addAttribute("board", board);
         return "board/updateBoard";
     }
@@ -106,13 +106,14 @@ public class BoardController {
     public String deleteBoard( HttpSession session,@RequestParam(name="num") int num,
                               @RequestParam(name="password") String password,
                               RedirectAttributes ra) {
-        BoardDTO board = boardService.showBoardDetail(num);
+        BoardViewDTO board = boardService.showBoardDetail(num);
 
         if (board != null && board.getPassword().equals(password)) {
 
             session.setAttribute("isPasswordVerified", true);
             session.setAttribute("verifiedUserId", board.getUserid());
             session.setAttribute("verifiedPassword", password);
+            commentService.deleteAllComments(num);
             boardService.deleteBoard(num);
             return "redirect:/board/showBoards";
         } else {

@@ -42,7 +42,7 @@ public class BoardService implements BoardServiceInterface {
         return boardDAO.dao_countBoards(map);
     }
     @Override
-    public BoardDTO showBoardDetail(int num) {
+    public BoardViewDTO showBoardDetail(int num) {
         return boardDAO.dao_showBoardDetail(num);
     }
     @Override
@@ -56,18 +56,22 @@ public class BoardService implements BoardServiceInterface {
     }
 
     @Override
+    public BoardDTO getBoard(int num) {
+        return boardDAO.dao_selectBoard(num);
+    }
+    @Override
     public BoardMetaDTO getMeta(int num) {
-        return null;
+        return boardDAO.dao_selectBoardMeta(num);
     }
 
     @Override
     public BoardStatusDTO getStatus(int num) {
-        return null;
+        return boardDAO.dao_selectBoardStatus(num);
     }
 
     @Override
     public BoardViewDTO assembleBoardViewDTO(int num) {
-        BoardDTO board = boardDAO.dao_showBoardDetail(num);
+        BoardDTO board = boardDAO.dao_selectBoard(num);
         BoardMetaDTO meta = boardDAO.dao_selectBoardMeta(num);
         BoardStatusDTO status =boardDAO.dao_selectBoardStatus(num);
         BoardViewDTO dto = new BoardViewDTO();

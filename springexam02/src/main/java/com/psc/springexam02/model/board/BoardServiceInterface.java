@@ -19,12 +19,13 @@ public interface BoardServiceInterface {
     // 검색한 갯수 보기
     int countBoards(String searchField, String searchWord);
     // 상세보기
-    BoardDTO showBoardDetail(int num);
+    BoardViewDTO showBoardDetail(int num);
     // 수정
     void updateBoard(BoardDTO board);
     // 삭제
     void deleteBoard(int num);
-
+    // 보드 가져오기
+    BoardDTO getBoard(int num);
     // 메타 정보 가져오기
     BoardMetaDTO getMeta(int num);
 

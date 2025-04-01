@@ -33,4 +33,9 @@ public class CommentService implements CommentServiceInterface {
     public CommentDTO showComment(int cnum) {
         return commentDAO.dao_showComment(cnum);
     }
+
+    @Override
+    public void deleteAllComments(int num) {
+        commentDAO.dao_deleteAllComments(num);
+    }
 }

@@ -36,4 +36,9 @@ public class CommentDAO implements CommentRepository {
     public CommentDTO dao_showComment(int cnum) {
         return commentMapper.showComment(cnum);
     }
+
+    @Override
+    public void dao_deleteAllComments(int num) {
+        commentMapper.deleteAllComments(num);
+    }
 }

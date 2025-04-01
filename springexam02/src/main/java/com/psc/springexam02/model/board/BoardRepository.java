@@ -3,6 +3,7 @@ package com.psc.springexam02.model.board;
 import com.psc.springexam02.dto.board.BoardDTO;
 import com.psc.springexam02.dto.board.BoardMetaDTO;
 import com.psc.springexam02.dto.board.BoardStatusDTO;
+import com.psc.springexam02.dto.board.BoardViewDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,12 +20,13 @@ public interface BoardRepository {
     // 검색한 보드 갯수
     int dao_countBoards(HashMap<String, String> map);
     // 상세보기
-    BoardDTO dao_showBoardDetail(int num);
+    BoardViewDTO dao_showBoardDetail(int num);
     // 수정
     void dao_updateBoard(BoardDTO board);
     // 삭제
     void dao_deleteBoard(int num);
-
+    // 보드 정보 가져오기
+    BoardDTO dao_selectBoard(int num);
     // 메타 정보 가져오기
     BoardMetaDTO dao_selectBoardMeta(int num);
     // Status 정보 가져오기
